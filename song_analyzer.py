@@ -38,9 +38,13 @@ def random_lyric_generator(lyric_text):
     def next_word_generator(input_word):
         if input_word in pmf:
             options = pmf[input_word]
-            return random.choices(list(options), weights=options.values())[0]
+            # print(pmf[input_word]) # comment this out for better lyrics printing
+            chosen_word = random.choices(list(options), weights=options.values())[0]
+            prob_raw = pmf[input_word][chosen_word];
+            rounded_prob = f"{prob_raw:.2f}"
+            return chosen_word, rounded_prob
         else:
-            return next(iter(pmf.items()))[0]
+            return next(iter(pmf.items()))[0], 1
 
     print("Welcome to the Song lyric-lengthener-model (Song LLM).")
     time.sleep(1)
@@ -51,8 +55,8 @@ def random_lyric_generator(lyric_text):
     user_input = ""
     print(last_word)
     while user_input == "":
-        last_word = (next_word_generator(last_word))
-        user_input = input(f"{last_word} ")
+        last_word, chance = (next_word_generator(last_word))
+        user_input = input(f"{last_word} ({chance}) ")
 
 if __name__ == "__main__":
     flashing_lights = """
